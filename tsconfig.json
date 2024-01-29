@@ -10,7 +10,7 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "baseUrl": "src",
-        "outDir": "dist",
+        "outDir": "src/dist",
         "typeRoots": ["./node_modules/@types"],
         "rootDirs": ["src"],
         "paths": {
