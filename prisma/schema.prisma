@@ -1,0 +1,27 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model user {
+    id         String     @id @default(uuid())
+    email      String     @unique
+    username   String
+    password   String
+    created_at DateTime?  @default(now())
+    updated_at DateTime?
+    schedule   schedule[]
+}
+
+model schedule {
+    id          String   @id @default(uuid())
+    user_id     String
+    description String
+    start_date  DateTime
+    end_date    DateTime
+    user        user     @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
