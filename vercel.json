@@ -8,7 +8,6 @@
     ],
     "routes": [
         {
-            "dist": "./dist",
             "src": "/(.*)",
             "dest": "server.js"
         }
