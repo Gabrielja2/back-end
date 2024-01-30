@@ -22,7 +22,7 @@ export class UserName {
     private static validate(name: string): boolean {
         if (!name) return false;
 
-        if (name.length > 256 || name.length < 3) return false;
+        if (name.length > 64 || name.length < 3) return false;
 
         if (typeof name !== "string") return false;
 

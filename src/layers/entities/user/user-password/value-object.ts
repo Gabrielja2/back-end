@@ -26,6 +26,8 @@ export class UserPassword {
 
         if (!userPasswordRegEx.test(userPassword)) return false;
 
+        if (userPassword.length < 8) return false
+
         return true;
     }
 }
