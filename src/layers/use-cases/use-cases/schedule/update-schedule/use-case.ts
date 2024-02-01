@@ -43,18 +43,24 @@ export class UpdateSchedulebyIdUseCase implements UpdateScheduleUseCaseProtocol 
         }
 
         if (start) {
+            if (new Date(start).toLocaleDateString() === "Invalid Date") return new InvalidParamError('Esse mês é inválido');
             startOrError = ScheduleStart.create(start.toString());
             if (startOrError instanceof Error) return startOrError;
         }
 
         if (end) {
+            if (new Date(end).toLocaleDateString() === "Invalid Date") return new InvalidParamError('Esse mês é inválido');
             endOrError = ScheduleEnd.create(end.toString());
             if (endOrError instanceof Error) return endOrError;
         }
 
         if (!(schedule.userId === loggedUserId)) return new UnauthorizedError("Usuário não possui permissão para editar este evento");
 
-        if (await this.getEventsByDate(start, end)) return new InvalidParamError("Já existe um evento neste período");
+        const eventExists = await this.getEventsByDate(start, end)
+
+
+        // if (eventExists) return new InvalidParamError("Já existe um evento neste período");
+        if (eventExists && eventExists[0].userId !== loggedUserId) return new InvalidParamError("Já existe um evento neste período");
 
         await scheduleRepository.updateScheduleById(id, {
             title: (titleOrError as ScheduleTitle)?.value,

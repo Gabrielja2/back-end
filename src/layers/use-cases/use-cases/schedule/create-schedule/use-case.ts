@@ -13,6 +13,9 @@ export class CreateScheduleUseCase implements CreateScheduleUseCaseProtocol {
     async execute({ title, start, end }: CreateScheduleDTO, loggedUserId?: string): Promise<CreateScheduleResponseDTO> {
         const scheduleRepository = this.unitOfWork.getScheduleRepository();
 
+
+        if (new Date(start).toLocaleDateString() === "Invalid Date") return new InvalidParamError('Esse mês é inválido');
+
         if (await this.getEventsByDate(start, end)) return new InvalidParamError('Ja existe um evento neste periodo');
 
         const scheduleOrError = Schedule.create(title, start, end);
