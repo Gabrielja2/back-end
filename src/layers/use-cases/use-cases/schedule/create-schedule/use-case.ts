@@ -10,17 +10,17 @@ export class CreateScheduleUseCase implements CreateScheduleUseCaseProtocol {
 
     ) { }
 
-    async execute({ description, startDate, endDate }: CreateScheduleDTO, loggedUserId?: string): Promise<CreateScheduleResponseDTO> {
+    async execute({ title, start, end }: CreateScheduleDTO, loggedUserId?: string): Promise<CreateScheduleResponseDTO> {
         const scheduleRepository = this.unitOfWork.getScheduleRepository();
 
-        if (await this.getEventsByDate(startDate, endDate)) return new InvalidParamError('Ja existe um evento neste periodo');
+        if (await this.getEventsByDate(start, end)) return new InvalidParamError('Ja existe um evento neste periodo');
 
-        const scheduleOrError = Schedule.create(description, startDate, endDate);
+        const scheduleOrError = Schedule.create(title, start, end);
         if (scheduleOrError instanceof Error) return scheduleOrError;
 
-        await scheduleRepository.createSchedule(scheduleOrError.description.value, scheduleOrError.startDate.value, scheduleOrError.endDate.value, loggedUserId);
+        await scheduleRepository.createSchedule(scheduleOrError.title.value, scheduleOrError.start.value, scheduleOrError.end.value, loggedUserId);
 
-        return scheduleOrError.description.value;
+        return scheduleOrError.title.value;
     }
 
     private readonly getEventsByDate = async (startDate: string, endDate: string) => {

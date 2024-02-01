@@ -1,33 +1,33 @@
-import { InvalidScheduleDescriptionError, InvalidScheduleEndDateError, InvalidScheduleStartDateError, ScheduleDescription, ScheduleEndDate, ScheduleStartDate } from "@/layers/entities";
+import { InvalidScheduleTitleError, InvalidScheduleEndError, InvalidScheduleStartError, ScheduleTitle, ScheduleEnd, ScheduleStart } from "@/layers/entities";
 
 
 export class Schedule {
 
     private constructor(
-        public description?: ScheduleDescription,
-        public startDate?: ScheduleStartDate,
-        public endDate?: ScheduleEndDate,
+        public title?: ScheduleTitle,
+        public start?: ScheduleStart,
+        public end?: ScheduleEnd,
     ) {
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.title = title;
+        this.start = start;
+        this.end = end;
         Object.freeze(this);
     }
 
     static create(
-        description?: string,
-        startDate?: string,
-        endDate?: string,
-    ): Schedule | InvalidScheduleDescriptionError | InvalidScheduleStartDateError | InvalidScheduleEndDateError {
-        const descriptionOrError = ScheduleDescription.create(description);
-        if (descriptionOrError instanceof Error) return descriptionOrError;
+        title?: string,
+        start?: string,
+        end?: string,
+    ): Schedule | InvalidScheduleTitleError | InvalidScheduleEndError | InvalidScheduleStartError {
+        const titleOrError = ScheduleTitle.create(title);
+        if (titleOrError instanceof Error) return titleOrError;
 
-        const startDateOrError = ScheduleStartDate.create(startDate);
-        if (startDateOrError instanceof Error) return startDateOrError;
+        const startOrError = ScheduleStart.create(start);
+        if (startOrError instanceof Error) return startOrError;
 
-        const endDateOrError = ScheduleEndDate.create(endDate);
-        if (endDateOrError instanceof Error) return endDateOrError;
+        const endOrError = ScheduleEnd.create(end);
+        if (endOrError instanceof Error) return endOrError;
 
-        return new Schedule(descriptionOrError, startDateOrError, endDateOrError);
+        return new Schedule(titleOrError, startOrError, endOrError);
     }
 }

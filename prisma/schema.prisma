@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-    provider = "mysql"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
@@ -18,10 +18,10 @@ model user {
 }
 
 model schedule {
-    id          String   @id @default(uuid())
-    user_id     String
-    description String
-    start_date  DateTime
-    end_date    DateTime
-    user        user     @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    id      String   @id @default(uuid())
+    user_id String
+    title   String
+    start   DateTime
+    end     DateTime
+    user    user     @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }

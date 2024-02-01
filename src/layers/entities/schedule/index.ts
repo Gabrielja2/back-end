@@ -1,5 +1,5 @@
-export * from "./schedule-description/value-object";
-export * from "./schedule-description/error";
+export * from "./schedule-title/value-object";
+export * from "./schedule-title/error";
 
 export * from "./schedule-start/value-object";
 export * from "./schedule-start/error";

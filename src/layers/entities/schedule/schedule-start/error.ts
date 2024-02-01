@@ -1,7 +1,7 @@
-export class InvalidScheduleStartDateError extends Error {
-    constructor(startDate: string) {
+export class InvalidScheduleStartError extends Error {
+    constructor(start: string) {
         super();
-        this.name = "InvalidScheduleStartDate";
-        this.message = `Essa data inicial (${startDate}) é inválida`;
+        this.name = "InvalidScheduleStartError";
+        this.message = `Essa data inicial (${start}) é inválida`;
     }
 }

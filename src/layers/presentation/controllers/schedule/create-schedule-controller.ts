@@ -6,22 +6,22 @@ export class CreateScheduleController implements HttpProtocol {
     constructor(private readonly useCase: CreateScheduleUseCaseProtocol) { }
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
-        const { description, startDate, endDate } = request.data;
+        const { title, start, end } = request.data;
         const loggedUserId = request.userId;
 
         const validation = Validate.fields(
             [
-                { name: "description", type: "string" },
-                { name: "startDate", type: "string" },
-                { name: "endDate", type: "string" }
+                { name: "title", type: "string" },
+                { name: "start", type: "string" },
+                { name: "end", type: "string" }
 
             ],
-            { description, startDate, endDate }
+            { title, start, end }
         );
 
         if (validation instanceof Error) return badRequest(validation);
 
-        const response = await this.useCase.execute({ description, startDate, endDate }, loggedUserId);
+        const response = await this.useCase.execute({ title, start, end }, loggedUserId);
 
         if (response instanceof Error) return badRequest(response);
 

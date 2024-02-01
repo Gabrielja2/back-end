@@ -10,12 +10,12 @@ import {
 import { UpdateScheduleUseCaseProtocol } from "./protocol";
 
 import {
-    InvalidScheduleDescriptionError,
-    InvalidScheduleEndDateError,
-    InvalidScheduleStartDateError,
-    ScheduleDescription,
-    ScheduleEndDate,
-    ScheduleStartDate,
+    InvalidScheduleTitleError,
+    InvalidScheduleEndError,
+    InvalidScheduleStartError,
+    ScheduleTitle,
+    ScheduleEnd,
+    ScheduleStart,
 } from "@/layers/entities";
 
 export class UpdateSchedulebyIdUseCase implements UpdateScheduleUseCaseProtocol {
@@ -26,47 +26,47 @@ export class UpdateSchedulebyIdUseCase implements UpdateScheduleUseCaseProtocol 
         data: Partial<ScheduleModel>,
         loggedUserId?: string
     ): Promise<UpdateScheduleResponseDTO> {
-        const { description, startDate, endDate } = data;
+        const { title, start, end } = data;
 
-        let descriptionOrError: ScheduleDescription | InvalidScheduleDescriptionError;
-        let startDateOrError: ScheduleStartDate | InvalidScheduleStartDateError;
-        let endDateOrError: ScheduleEndDate | InvalidScheduleEndDateError;
+        let titleOrError: ScheduleTitle | InvalidScheduleTitleError;
+        let startOrError: ScheduleStart | InvalidScheduleStartError;
+        let endOrError: ScheduleEnd | InvalidScheduleEndError;
 
         const scheduleRepository = this.unitOfWork.getScheduleRepository();
 
         const schedule = await scheduleRepository.getScheduleById(id);
         if (!schedule) return new NotFoundError("Evento não encontrado");
 
-        if (description) {
-            descriptionOrError = ScheduleDescription.create(description);
-            if (descriptionOrError instanceof Error) return descriptionOrError;
+        if (title) {
+            titleOrError = ScheduleTitle.create(title);
+            if (titleOrError instanceof Error) return titleOrError;
         }
 
-        if (startDate) {
-            startDateOrError = ScheduleStartDate.create(startDate.toString());
-            if (startDateOrError instanceof Error) return startDateOrError;
+        if (start) {
+            startOrError = ScheduleStart.create(start.toString());
+            if (startOrError instanceof Error) return startOrError;
         }
 
-        if (endDate) {
-            endDateOrError = ScheduleEndDate.create(endDate.toString());
-            if (endDateOrError instanceof Error) return endDateOrError;
+        if (end) {
+            endOrError = ScheduleEnd.create(end.toString());
+            if (endOrError instanceof Error) return endOrError;
         }
 
         if (!(schedule.userId === loggedUserId)) return new UnauthorizedError("Usuário não possui permissão para editar este evento");
 
-        if (await this.getEventsByDate(startDate, endDate)) return new InvalidParamError("Já existe um evento neste período");
+        if (await this.getEventsByDate(start, end)) return new InvalidParamError("Já existe um evento neste período");
 
         await scheduleRepository.updateScheduleById(id, {
-            description: (descriptionOrError as ScheduleDescription)?.value,
-            startDate: (startDateOrError as ScheduleStartDate)?.value,
-            endDate: (endDateOrError as ScheduleEndDate)?.value,
+            title: (titleOrError as ScheduleTitle)?.value,
+            start: (startOrError as ScheduleStart)?.value,
+            end: (endOrError as ScheduleEnd)?.value,
         });
 
         return `Evento ${id} atualizado`;
     }
 
-    private readonly getEventsByDate = async (startDate: string | Date, endDate: string | Date) => {
+    private readonly getEventsByDate = async (start: string | Date, end: string | Date) => {
         const scheduleRepository = this.unitOfWork.getScheduleRepository();
-        return await scheduleRepository.getSchedulesByDate(startDate.toString(), endDate.toString());
+        return await scheduleRepository.getSchedulesByDate(start.toString(), end.toString());
     };
 }

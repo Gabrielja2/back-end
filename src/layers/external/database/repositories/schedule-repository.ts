@@ -15,21 +15,21 @@ export class ScheduleRepositoryAdapter implements ScheduleRepositoryProtocol {
     private toMapperScheduleModel(schedule: SchedulePrismaModel): ScheduleModel {
         return new ScheduleModel(
             schedule.id,
-            schedule.description,
-            schedule.start_date,
-            schedule.end_date,
+            schedule.title,
+            schedule.start,
+            schedule.end,
             schedule.user_id
         );
     }
 
 
-    async createSchedule(description: string, startDate: Date, endDate: Date, userId: string): Promise<ScheduleModel> {
+    async createSchedule(title: string, start: Date, end: Date, userId: string): Promise<ScheduleModel> {
 
         const schedule = await this.context.schedule.create({
             data: {
-                description,
-                start_date: startDate,
-                end_date: endDate,
+                title,
+                start,
+                end,
                 user_id: userId
             }
         })
@@ -37,28 +37,28 @@ export class ScheduleRepositoryAdapter implements ScheduleRepositoryProtocol {
         return this.toMapperScheduleModel(schedule);
     }
 
-    async getSchedulesByDate(startDate: string, endDate: string): Promise<ScheduleModel[] | null> {
+    async getSchedulesByDate(start: string, end: string): Promise<ScheduleModel[] | null> {
         const schedulesList: ScheduleModel[] = [];
 
         const schedules = await this.context.schedule.findMany({
             where: {
                 OR: [
                     {
-                        start_date: {
-                            lte: new Date(endDate),
-                            gte: new Date(startDate),
+                        start: {
+                            lte: new Date(end),
+                            gte: new Date(start),
                         },
                     },
                     {
-                        end_date: {
-                            lte: new Date(endDate),
-                            gte: new Date(startDate),
+                        end: {
+                            lte: new Date(end),
+                            gte: new Date(start),
                         },
                     },
                     {
                         AND: [
-                            { start_date: { lte: new Date(startDate) } },
-                            { end_date: { gte: new Date(endDate) } },
+                            { start: { lte: new Date(start) } },
+                            { end: { gte: new Date(end) } },
                         ],
                     },
                 ],

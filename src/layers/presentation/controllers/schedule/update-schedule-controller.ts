@@ -7,23 +7,23 @@ export class UpdateScheduleController implements HttpProtocol {
 	constructor(private readonly useCase: UpdateScheduleUseCaseProtocol) { }
 
 	async handle(request: HttpRequest): Promise<HttpResponse> {
-		const { id, description, startDate, endDate } = request.data;
+		const { id, title, start, end } = request.data;
 
 		const loggedUserId = request.userId;
 
 		const validation = Validate.fields(
 			[
 				{ name: "id", type: "string" },
-				{ name: "description", type: "string", nullable: true },
-				{ name: "startDate", type: "string", nullable: true },
-				{ name: "endDate", type: "string", nullable: true },
+				{ name: "title", type: "string", nullable: true },
+				{ name: "start", type: "string", nullable: true },
+				{ name: "end", type: "string", nullable: true },
 			],
-			{ id, description, startDate, endDate }
+			{ id, title, start, end }
 		);
 
 		if (validation instanceof Error) return badRequest(validation);
 
-		const response = await this.useCase.execute(id, { description, startDate, endDate }, loggedUserId);
+		const response = await this.useCase.execute(id, { title, start, end }, loggedUserId);
 
 		if (response instanceof Error) return response instanceof NotFoundError ? notFound(response) : badRequest(response);
 

@@ -1,30 +1,30 @@
-import { InvalidScheduleEndDateError } from "./error";
+import { InvalidScheduleEndError } from "./error";
 
-export class ScheduleEndDate {
+export class ScheduleEnd {
 
-    private readonly endDate: Date;
+    private readonly end: Date;
 
-    private constructor(endDate: Date) {
-        this.endDate = endDate;
+    private constructor(end: Date) {
+        this.end = end;
         Object.freeze(this);
     }
 
     public get value(): Date {
-        return this.endDate;
+        return this.end;
     }
 
-    static create(endDate: string): ScheduleEndDate | InvalidScheduleEndDateError {
-        if (!this.validate(endDate)) return new InvalidScheduleEndDateError(endDate);
+    static create(end: string): ScheduleEnd | InvalidScheduleEndError {
+        if (!this.validate(end)) return new InvalidScheduleEndError(end);
 
-        return new ScheduleEndDate(new Date(endDate));
+        return new ScheduleEnd(new Date(end));
     }
 
-    private static validate(endDate: string): boolean {
-        if (!endDate) return false;
+    private static validate(end: string): boolean {
+        if (!end) return false;
 
-        if (typeof endDate !== "string") return false;
+        if (typeof end !== "string") return false;
 
-        if (new Date(endDate) < new Date()) return false
+        if (new Date(end) < new Date()) return false
 
         return true;
     }
