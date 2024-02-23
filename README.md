@@ -1,4 +1,4 @@
-# Sejam bem vindos ao repositório backend do desáfio Tokenlabs!
+# Sejam bem vindos ao repositório backend do projeto my-calendary!
 
 Este projeto foi completamente desenvolvido em TypeScript, utilizando Node.js, Express.js, Prisma, Postgresql e outras bibliotecas auxiliares como, jsonwebtoken, bcrypt, jest, entre algumas outras. 🚀
 
