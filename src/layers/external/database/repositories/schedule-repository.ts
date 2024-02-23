@@ -52,15 +52,10 @@ export class ScheduleRepositoryAdapter implements ScheduleRepositoryProtocol {
                     {
                         end: {
                             lte: new Date(end).toISOString(),
-                            gte: new Date(start).toISOString(),
+                            gt: new Date(start).toISOString(),
                         },
                     },
-                    {
-                        AND: [
-                            { start: { lte: new Date(start).toISOString() } },
-                            { end: { gte: new Date(end).toISOString() } },
-                        ],
-                    },
+
                 ],
             },
             orderBy: {
@@ -70,6 +65,7 @@ export class ScheduleRepositoryAdapter implements ScheduleRepositoryProtocol {
 
         for (const schedule of schedules) {
             schedulesList.push(this.toMapperScheduleModel(schedule));
+            console.log('schedulesList', schedulesList);
         }
 
         if (schedules.length === 0) return null;

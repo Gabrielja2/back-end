@@ -59,9 +59,10 @@ export class UpdateSchedulebyIdUseCase implements UpdateScheduleUseCaseProtocol 
         if (!(schedule.userId === loggedUserId)) return new UnauthorizedError("Usuário não possui permissão para editar este evento");
 
         const eventExists = await this.getEventsByDate(start, end)
-        console.log('eventExists', eventExists);
 
         if (eventExists) return new InvalidParamError("Já existe um evento neste período");
+
+        if (new Date(end).toISOString() <= new Date(start).toISOString()) return new InvalidParamError('Data final deve ser posterior a data inicial');
 
         await scheduleRepository.updateScheduleById(id, {
             title: (titleOrError as ScheduleTitle)?.value,
