@@ -45,20 +45,20 @@ export class ScheduleRepositoryAdapter implements ScheduleRepositoryProtocol {
                 OR: [
                     {
                         start: {
-                            lte: new Date(end),
-                            gte: new Date(start),
+                            lte: new Date(end).toISOString(),
+                            gte: new Date(start).toISOString(),
                         },
                     },
                     {
                         end: {
-                            lte: new Date(end),
-                            gte: new Date(start),
+                            lte: new Date(end).toISOString(),
+                            gte: new Date(start).toISOString(),
                         },
                     },
                     {
                         AND: [
-                            { start: { lte: new Date(start) } },
-                            { end: { gte: new Date(end) } },
+                            { start: { lte: new Date(start).toISOString() } },
+                            { end: { gte: new Date(end).toISOString() } },
                         ],
                     },
                 ],

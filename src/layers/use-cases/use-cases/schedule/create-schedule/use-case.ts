@@ -14,7 +14,7 @@ export class CreateScheduleUseCase implements CreateScheduleUseCaseProtocol {
         const scheduleRepository = this.unitOfWork.getScheduleRepository();
 
 
-        if (new Date(start).toLocaleDateString() === "Invalid Date") return new InvalidParamError('Esse mês é inválido');
+        if (new Date(start).toLocaleDateString() === "Invalid Date") return new InvalidParamError('Essa data é inválida');
 
         if (await this.getEventsByDate(start, end)) return new InvalidParamError('Ja existe um evento neste periodo');
 
