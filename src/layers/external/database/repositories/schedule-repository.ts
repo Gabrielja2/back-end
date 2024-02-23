@@ -63,6 +63,9 @@ export class ScheduleRepositoryAdapter implements ScheduleRepositoryProtocol {
                     },
                 ],
             },
+            orderBy: {
+                start: "asc",
+            }
         });
 
         for (const schedule of schedules) {
@@ -81,6 +84,9 @@ export class ScheduleRepositoryAdapter implements ScheduleRepositoryProtocol {
         const schedules = await this.context.schedule.findMany({
             where: {
                 user_id: userId
+            },
+            orderBy: {
+                start: "asc",
             }
         })
 
@@ -95,7 +101,11 @@ export class ScheduleRepositoryAdapter implements ScheduleRepositoryProtocol {
     async getSchedules(): Promise<ScheduleModel[] | null> {
         const schedulesList: ScheduleModel[] = [];
 
-        const schedules = await this.context.schedule.findMany()
+        const schedules = await this.context.schedule.findMany({
+            orderBy: {
+                start: "asc",
+            }
+        })
 
         for (const schedule of schedules) {
             schedulesList.push(this.toMapperScheduleModel(schedule));
